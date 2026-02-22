@@ -5,11 +5,15 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  
+
   --color-studio-black: #050505;
   --color-studio-zinc: #18181b;
   --color-studio-white: #fafafa;
-  --color-studio-accent: #3b82f6; 
+  --color-studio-accent: #3b82f6;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -24,4 +28,66 @@ body {
 ::selection {
   background-color: var(--color-studio-white);
   color: var(--color-studio-black);
+}
+
+/* Marquee animation for social proof strip */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee 25s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Blur-up image placeholder */
+.blur-up {
+  filter: blur(20px);
+  opacity: 0.6;
+  transition: filter 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.blur-up.loaded {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* Horizontal scroll culture section */
+.culture-scroll {
+  overflow: hidden;
+}
+
+/* Accessibility: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+/* Focus-visible styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-studio-white);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-studio-white);
+  outline-offset: 2px;
 }
