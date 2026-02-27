@@ -1,18 +1,40 @@
-import { motion, AnimatePresence, useScroll, useTransform, LayoutGroup } from 'motion/react';
-import { ArrowDown, Menu, X, ArrowUpRight, Instagram, Linkedin, Mail, Plus, Camera, Users, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
+import { ArrowDown, Menu, X, ArrowUpRight, Instagram, Linkedin, Mail, Plus, Camera, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Tagger from './Tagger';
+import { galleryImages, GALLERY_CATEGORIES, type GalleryImage, type GalleryCategory } from './data/galleryImages';
 
-// --- Types ---
+// --- Geometric Micrographic Symbols ---
 
-type ProjectCategory = 'All' | 'Tech Events' | 'Portraits' | 'Community' | 'Culture';
+const GeoStar = ({ size = 20, className = '' }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="1" y1="12" x2="23" y2="12" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="4.2" y1="4.2" x2="19.8" y2="19.8" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="19.8" y1="4.2" x2="4.2" y2="19.8" stroke="currentColor" strokeWidth="0.75" />
+  </svg>
+);
 
-interface Project {
-  title: string;
-  category: ProjectCategory;
-  specs: string;
-  tag: string;
-  image: string;
-}
+const GeoCross = ({ size = 20, className = '' }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" strokeWidth="0.5" />
+    <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="0.5" />
+    <circle cx="12" cy="12" r="2" fill="currentColor" />
+  </svg>
+);
+
+const GeoCompass = ({ size = 20, className = '' }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="0.5" />
+    <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="0.5" />
+    <line x1="12" y1="0" x2="12" y2="7" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="12" y1="17" x2="12" y2="24" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="0" y1="12" x2="7" y2="12" stroke="currentColor" strokeWidth="0.75" />
+    <line x1="17" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="0.75" />
+    <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+  </svg>
+);
 
 // --- Components ---
 
@@ -39,7 +61,7 @@ const Loader = ({ onComplete }: { onComplete: () => void }) => {
     }, 100);
 
     const textInterval = setInterval(() => {
-      const texts = ["LOADING FRAMES...", "DEVELOPING...", "FOCUSING...", "COMPOSING..."];
+      const texts = ["LOADING FRAMES...", "DEVELOPING...", "FOCUSING...", "NOTICING..."];
       setText(texts[Math.floor(Math.random() * texts.length)]);
     }, 800);
 
@@ -93,11 +115,23 @@ const GridBackground = () => {
       <div className="absolute top-24 right-6 translate-x-1/2 -translate-y-1/2 text-white/40"><Plus size={12} /></div>
       <div className="absolute bottom-24 left-6 -translate-x-1/2 translate-y-1/2 text-white/40"><Plus size={12} /></div>
       <div className="absolute bottom-24 right-6 translate-x-1/2 translate-y-1/2 text-white/40"><Plus size={12} /></div>
+
+      {/* Floating geometric marks */}
+      <div className="absolute top-[18%] right-12 hidden md:flex flex-col items-center gap-1 text-white/30">
+        <GeoStar size={18} />
+        <span className="font-mono text-[8px] tracking-[0.25em]">BJN</span>
+      </div>
+      <div className="absolute top-[55%] left-12 hidden md:flex flex-col items-center gap-1 text-white/20">
+        <GeoCompass size={16} />
+      </div>
+      <div className="absolute bottom-[30%] right-12 hidden md:block text-white/20">
+        <GeoCross size={14} />
+      </div>
     </div>
   );
 };
 
-const Header = () => {
+const Header = ({ hidden }: { hidden?: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const hasSeenLoader = sessionStorage.getItem('bjn-loaded');
@@ -119,7 +153,7 @@ const Header = () => {
     <>
       <motion.header
         role="banner"
-        className={`fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-between items-center transition-colors duration-300 ${isScrolled ? 'bg-studio-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}
+        className={`fixed top-0 left-0 right-0 z-50 px-6 py-6 flex justify-between items-center transition-colors duration-300 ${isScrolled ? 'bg-studio-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'} ${hidden ? 'pointer-events-none opacity-0' : ''}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: animDelay }}
@@ -173,7 +207,7 @@ const Header = () => {
             >
               <X size={32} />
             </button>
-            <nav className="flex flex-col gap-8 text-center font-display text-4xl font-light">
+            <nav className="flex flex-col gap-8 text-center font-display text-3xl font-light">
               {['GALLERY', 'ABOUT', 'SERVICES', 'CONTACT'].map((item) => (
                 <a
                   key={item}
@@ -192,41 +226,68 @@ const Header = () => {
   );
 };
 
+const HERO_IMAGES = [
+  'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=2070&auto=format&fit=crop',
+  '/hero/SEAN9753.jpg',
+  '/hero/IMG_2511.jpg',
+  '/hero/IMG_9784.jpg',
+  '/hero/IMG_9768.jpg',
+  '/hero/IMG_9441.jpg',
+  '/hero/IMG_6535.jpg',
+];
+
 const Hero = () => {
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
   const hasSeenLoader = sessionStorage.getItem('bjn-loaded');
   const delay1 = hasSeenLoader ? 0.3 : 2.8;
   const delay2 = hasSeenLoader ? 0.6 : 3.2;
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const advance = () => {
+      setCurrentSlide(prev => (prev + 1) % HERO_IMAGES.length);
+      timer = setTimeout(advance, 5000);
+    };
+    timer = setTimeout(advance, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 pt-24 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10" />
-        <motion.img
-          src="https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=2070&auto=format&fit=crop"
-          alt="Chicago Skyline"
-          className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-[2s]"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 10, ease: "linear" }}
-        />
+        <AnimatePresence mode="popLayout">
+          <motion.img
+            key={currentSlide}
+            src={HERO_IMAGES[currentSlide]}
+            alt="Photography by BJN"
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 0.6, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ opacity: { duration: 1.2 }, scale: { duration: 6, ease: 'linear' } }}
+          />
+        </AnimatePresence>
       </div>
 
       <div className="max-w-7xl mx-auto w-full z-10">
         <motion.div
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: delay1 }}
-          style={{ y: y1 }}
         >
-          <h1 className="font-display text-[12vw] leading-[0.85] font-medium tracking-tighter mix-blend-overlay text-white">
+          <div className="flex items-center gap-3 mb-4">
+            <GeoStar size={16} className="text-white/40" />
+            <div className="font-mono text-[9px] tracking-[0.25em] text-white/40 uppercase leading-relaxed">
+              <span>CHICAGO, IL</span>
+            </div>
+          </div>
+          <h1 className="font-display text-[15vw] md:text-[12vw] leading-[0.85] font-medium tracking-tighter mix-blend-overlay text-white" style={{ textShadow: '6px 0 12px rgba(255,255,255,0.04), 12px 0 24px rgba(255,255,255,0.02)' }}>
             PEOPLE.
             <br />
-            TECH.
+            CULTURE.
             <br />
-            <span className="italic font-light text-white/90">CULTURE.</span>
+            <span className="italic font-light text-white/90">COMMUNITY.</span>
           </h1>
         </motion.div>
 
@@ -235,18 +296,35 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: delay2 }}
-          style={{ y: y2 }}
         >
-          <div className="max-w-md font-mono text-xs md:text-sm text-white/80 leading-relaxed uppercase tracking-wide">
-            [EST. 2024] — BJN PHOTOGRAPHY<br/>
-            I SHOOT TECH EVENTS, PORTRAITS, AND THE CULTURE THAT MOVES CHICAGO FORWARD.
-          </div>
-          <div className="flex gap-4">
-             <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center animate-spin-slow backdrop-blur-sm">
-                <ArrowDown size={16} />
-             </div>
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center gap-3 bg-white text-black font-mono text-xs uppercase tracking-wider px-8 py-4 w-full md:w-auto hover:bg-white/90 transition-colors no-underline"
+          >
+            Book Your Event <ArrowUpRight size={14} />
+          </a>
+          <div className="hidden md:flex items-center gap-3">
+            <GeoCross size={14} className="text-white/30" />
+            <div className="font-mono text-[9px] tracking-[0.25em] text-white/30 leading-relaxed">
+              <span>BJN PHOTOGRAPHY</span><br />
+              <span>41.8781&deg; N, 87.6298&deg; W</span>
+            </div>
           </div>
         </motion.div>
+
+        {/* Slide indicators */}
+        <div className="flex gap-2 mt-8">
+          {HERO_IMAGES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`h-[2px] rounded-full transition-all duration-500 cursor-pointer ${
+                i === currentSlide ? 'w-8 bg-white/80' : 'w-4 bg-white/25 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -273,12 +351,175 @@ const BlurImage = ({ src, alt, className = '' }: { src: string; alt: string; cla
   );
 };
 
-// --- 4.1 Gallery with Lightbox + Category Filter + Hover Tags ---
+// --- 4.1 Collection Gallery — Cover Cards + Click-Through Viewer ---
 
-const ProjectCard = ({ project, index, onClick }: { project: Project; index: number; onClick: () => void }) => {
+const CollectionViewer = ({ category, images, onClose }: {
+  category: GalleryCategory;
+  images: GalleryImage[];
+  onClose: () => void;
+}) => {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const nextImage = useCallback(() => {
+    if (lightboxIndex === null) return;
+    setLightboxIndex((lightboxIndex + 1) % images.length);
+  }, [lightboxIndex, images.length]);
+
+  const prevImage = useCallback(() => {
+    if (lightboxIndex === null) return;
+    setLightboxIndex((lightboxIndex - 1 + images.length) % images.length);
+  }, [lightboxIndex, images.length]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && lightboxIndex === null) onClose();
+    };
+    window.addEventListener('keydown', handler);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = '';
+    };
+  }, [onClose, lightboxIndex]);
+
   return (
     <motion.div
-      layout
+      className="fixed inset-0 z-[80] bg-studio-black overflow-y-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      {/* Header bar */}
+      <div className="sticky top-0 z-[85] bg-studio-black/95 backdrop-blur-sm border-b border-white/10 px-6 py-5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={onClose}
+              className="flex items-center gap-2 font-mono text-xs text-white/50 hover:text-white transition-colors cursor-pointer"
+            >
+              <ChevronLeft size={16} />
+              BACK
+            </button>
+            <div className="h-4 w-px bg-white/15" />
+            <h2 className="font-display text-lg md:text-xl font-medium">{category.toUpperCase()}</h2>
+          </div>
+          <span className="font-mono text-[10px] text-white/40 uppercase tracking-wider">
+            {images.length} PHOTOS
+          </span>
+        </div>
+      </div>
+
+      {/* Fixed close button — always visible, above site nav */}
+      <button
+        onClick={onClose}
+        className="fixed top-6 right-6 z-[100] w-14 h-14 flex items-center justify-center bg-white text-black rounded-full shadow-xl shadow-black/50 hover:scale-110 transition-transform duration-200 cursor-pointer"
+        aria-label="Close collection"
+      >
+        <X size={28} strokeWidth={3} />
+      </button>
+
+      {/* Masonry grid — respects portrait vs landscape orientation */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="columns-2 md:columns-3 gap-3 space-y-3">
+          {images.map((img, i) => {
+            const isTall = img.size === 'tall' || img.size === 'hero' || img.size === 'feature';
+            return (
+              <motion.div
+                key={img.src}
+                className="break-inside-avoid group cursor-pointer relative overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: Math.min(i * 0.04, 0.4) }}
+                onClick={() => setLightboxIndex(i)}
+              >
+                <div
+                  className="overflow-hidden bg-white/5"
+                  style={{ aspectRatio: isTall ? '3 / 4' : '4 / 3' }}
+                >
+                  <BlurImage
+                    src={img.src}
+                    alt={img.alt}
+                    className="transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/60 to-transparent">
+                  <p className="font-mono text-[10px] text-white/80 uppercase tracking-wider">{img.title}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Lightbox inside collection viewer */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            className="fixed inset-0 z-[90] flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" onClick={() => setLightboxIndex(null)} />
+
+            <button onClick={prevImage} className="absolute left-4 md:left-8 z-10 p-3 text-white/50 hover:text-white transition-colors" aria-label="Previous image">
+              <ChevronLeft size={32} />
+            </button>
+            <button onClick={nextImage} className="absolute right-4 md:right-8 z-10 p-3 text-white/50 hover:text-white transition-colors" aria-label="Next image">
+              <ChevronRight size={32} />
+            </button>
+            <button onClick={() => setLightboxIndex(null)} className="fixed top-6 right-6 z-[100] w-14 h-14 flex items-center justify-center bg-white text-black rounded-full shadow-xl shadow-black/50 hover:scale-110 transition-transform duration-200 cursor-pointer" aria-label="Close lightbox">
+              <X size={28} strokeWidth={3} />
+            </button>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={lightboxIndex}
+                className="relative z-10 flex flex-col items-center mx-4 md:mx-8 max-h-[90vh]"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={images[lightboxIndex].src}
+                  alt={images[lightboxIndex].alt}
+                  className="max-h-[80vh] max-w-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="mt-4 flex justify-between items-baseline w-full max-w-3xl">
+                  <div>
+                    <h3 className="font-display text-xl md:text-2xl font-medium text-white">{images[lightboxIndex].title}</h3>
+                    <p className="font-mono text-xs text-white/50 mt-1 uppercase tracking-wider">{category}</p>
+                  </div>
+                  <span className="font-mono text-xs text-white/30">{lightboxIndex + 1} / {images.length}</span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+const COVER_SYMBOLS = [GeoStar, GeoCross, GeoCompass, GeoStar, GeoCross, GeoCompass];
+
+const CoverCard = ({ category, images, index, onClick }: {
+  category: GalleryCategory;
+  images: GalleryImage[];
+  index: number;
+  onClick: () => void;
+}) => {
+  const cover = images.find(img => img.isCover) || images[0];
+  const Symbol = COVER_SYMBOLS[index % COVER_SYMBOLS.length];
+  const isTall = cover.size === 'tall' || cover.size === 'hero' || cover.size === 'feature';
+
+  return (
+    <motion.div
       className="group relative cursor-pointer"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -286,26 +527,36 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
       transition={{ duration: 0.8, delay: index * 0.1 }}
       onClick={onClick}
     >
-      <div className="aspect-[4/5] md:aspect-[3/4] overflow-hidden bg-white/5 mb-4 relative">
+      <div
+        className="overflow-hidden bg-white/5 mb-4 relative"
+        style={{ aspectRatio: isTall ? '3 / 4' : '4 / 3' }}
+      >
         <div className="absolute inset-0 bg-studio-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
         <BlurImage
-          src={project.image}
-          alt={project.title}
+          src={cover.src}
+          alt={cover.alt}
           className="transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
         />
         <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="bg-white text-black font-mono text-xs px-2 py-1">VIEW</div>
+          <div className="bg-white text-black font-mono text-xs px-3 py-1.5 flex items-center gap-1.5">
+            VIEW COLLECTION <ArrowUpRight size={12} />
+          </div>
         </div>
-        {/* Hover tag overlay: location + year + tag */}
-        <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-between items-end">
-          <div className="text-white font-mono text-[10px] uppercase tracking-widest">{project.specs}</div>
-          <div className="bg-white/10 backdrop-blur-sm text-white font-mono text-[10px] px-2 py-1 uppercase tracking-wider">{project.tag}</div>
+        <div className="absolute bottom-4 left-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="bg-white/10 backdrop-blur-sm text-white font-mono text-[10px] px-2 py-1 uppercase tracking-wider">
+            {images.length} PHOTOS
+          </div>
         </div>
       </div>
       <div className="flex justify-between items-baseline border-b border-white/10 pb-4 group-hover:border-white/40 transition-colors">
         <div>
-          <h3 className="font-display text-2xl md:text-3xl font-medium">{project.title}</h3>
-          <p className="font-mono text-xs text-white/50 mt-1 uppercase tracking-wider">{project.category}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <Symbol size={10} className="text-white/30" />
+            <span className="font-mono text-[9px] tracking-[0.2em] text-white/30 uppercase">
+              {String(images.length).padStart(2, '0')} WORKS
+            </span>
+          </div>
+          <h3 className="font-display text-2xl md:text-3xl font-medium">{category}</h3>
         </div>
         <ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity -translate-y-1 group-hover:translate-y-0 duration-300" />
       </div>
@@ -313,190 +564,80 @@ const ProjectCard = ({ project, index, onClick }: { project: Project; index: num
   );
 };
 
-const Lightbox = ({ projects, currentIndex, onClose, onNext, onPrev }: {
-  projects: Project[];
-  currentIndex: number;
-  onClose: () => void;
-  onNext: () => void;
-  onPrev: () => void;
-}) => {
-  const project = projects[currentIndex];
+const BentoGallery = ({ openCategory, setOpenCategory }: { openCategory: GalleryCategory | null; setOpenCategory: (cat: GalleryCategory | null) => void }) => {
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') onNext();
-      if (e.key === 'ArrowLeft') onPrev();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [onClose, onNext, onPrev]);
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[90] flex items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Navigation */}
-      <button
-        onClick={onPrev}
-        className="absolute left-4 md:left-8 z-10 p-3 text-white/50 hover:text-white transition-colors"
-        aria-label="Previous image"
-      >
-        <ChevronLeft size={32} />
-      </button>
-      <button
-        onClick={onNext}
-        className="absolute right-4 md:right-8 z-10 p-3 text-white/50 hover:text-white transition-colors"
-        aria-label="Next image"
-      >
-        <ChevronRight size={32} />
-      </button>
-
-      {/* Close */}
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 z-10 p-2 text-white/50 hover:text-white transition-colors"
-        aria-label="Close lightbox"
-      >
-        <X size={28} />
-      </button>
-
-      {/* Image */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentIndex}
-          className="relative z-10 w-full max-w-5xl mx-4 md:mx-8"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="aspect-[4/3] md:aspect-[16/10] overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="mt-4 flex justify-between items-baseline">
-            <div>
-              <h3 className="font-display text-xl md:text-2xl font-medium text-white">{project.title}</h3>
-              <p className="font-mono text-xs text-white/50 mt-1 uppercase tracking-wider">
-                {project.category} — {project.specs}
-              </p>
-            </div>
-            <span className="font-mono text-xs text-white/30">{currentIndex + 1} / {projects.length}</span>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    </motion.div>
-  );
-};
-
-const Gallery = () => {
-  const categories: ProjectCategory[] = ['All', 'Tech Events', 'Portraits', 'Community', 'Culture'];
-  const [activeFilter, setActiveFilter] = useState<ProjectCategory>('All');
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  // TODO: Replace Unsplash images with Billy's real photos
-  const projects: Project[] = [
-    { title: "Demo Day", category: "Tech Events", specs: "Chicago, 2024", tag: "Keynote", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop" },
-    { title: "Pitch Night", category: "Tech Events", specs: "1871, 2025", tag: "Startup", image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop" },
-    { title: "Faces of the Scene", category: "Portraits", specs: "Ongoing Series", tag: "Street Portrait", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop" },
-    { title: "Creative Headshots", category: "Portraits", specs: "Studio, 2025", tag: "Headshot", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2070&auto=format&fit=crop" },
-    { title: "South Side Stories", category: "Community", specs: "Southeast Chicago", tag: "Documentary", image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070&auto=format&fit=crop" },
-    { title: "Block Party", category: "Community", specs: "Bronzeville, 2024", tag: "Community", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2070&auto=format&fit=crop" },
-    { title: "After Hours", category: "Culture", specs: "Chicago", tag: "Nightlife", image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2070&auto=format&fit=crop" },
-    { title: "The Art of Food", category: "Culture", specs: "West Loop, 2025", tag: "Lifestyle", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop" },
-  ];
-
-  const filtered = activeFilter === 'All'
-    ? projects
-    : projects.filter(p => p.category === activeFilter);
-
-  const openLightbox = (filteredIndex: number) => {
-    setLightboxIndex(filteredIndex);
+  // Group images by category
+  const imagesByCategory: Record<GalleryCategory, GalleryImage[]> = {
+    'Portraits': [],
+    'Corporate Events': [],
+    'Creative/Editorial': [],
+    'Non-Profit Events': [],
+    'Social Events': [],
+    'Community': [],
   };
+  galleryImages.forEach(img => {
+    if (imagesByCategory[img.category]) {
+      imagesByCategory[img.category].push(img);
+    }
+  });
 
-  const nextImage = useCallback(() => {
-    if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex + 1) % filtered.length);
-  }, [lightboxIndex, filtered.length]);
-
-  const prevImage = useCallback(() => {
-    if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex - 1 + filtered.length) % filtered.length);
-  }, [lightboxIndex, filtered.length]);
+  const activeCategories = GALLERY_CATEGORIES.filter(cat => imagesByCategory[cat].length > 0);
+  const showFallback = galleryImages.length === 0;
 
   return (
     <section id="gallery" className="py-24 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <div className="flex items-end justify-between mb-16">
-          <h2 className="font-display text-6xl md:text-8xl font-light tracking-tighter">THE<br/>WORK</h2>
-          <span className="font-mono text-xs text-white/50 hidden md:block uppercase tracking-widest">({String(filtered.length).padStart(2, '0')}) COLLECTIONS</span>
-        </div>
-
-        {/* Category Filter Bar */}
-        <div className="flex flex-wrap gap-3 mb-16">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              className={`font-mono text-xs px-4 py-2 rounded-full border transition-all duration-300 cursor-pointer ${
-                activeFilter === cat
-                  ? 'bg-white text-black border-white'
-                  : 'bg-transparent text-white/60 border-white/20 hover:border-white/50 hover:text-white'
-              }`}
-            >
-              {cat.toUpperCase()}
-            </button>
-          ))}
-        </div>
-
-        <LayoutGroup>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-24">
-            {filtered.map((project, index) => (
-              <motion.div
-                key={project.title}
-                layout
-                className={index % 2 === 1 ? "md:mt-24" : ""}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <ProjectCard
-                  project={project}
-                  index={index}
-                  onClick={() => openLightbox(index)}
-                />
-              </motion.div>
-            ))}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <GeoStar size={12} className="text-white/40" />
+              <span className="font-mono text-[9px] tracking-[0.25em] text-white/40 uppercase">COLLECTED WORKS</span>
+            </div>
+            <h2 className="font-display text-4xl md:text-6xl lg:text-8xl font-light tracking-tighter">THE<br/>GALLERY</h2>
           </div>
-        </LayoutGroup>
+          <span className="font-mono text-xs text-white/50 hidden md:block uppercase tracking-widest">
+            ({String(activeCategories.length).padStart(2, '0')}) COLLECTIONS
+          </span>
+        </div>
+
+        {showFallback ? (
+          <div className="text-center py-24 border border-white/10">
+            <p className="font-mono text-sm text-white/40 mb-4">Gallery images not yet tagged.</p>
+            <p className="font-mono text-xs text-white/25">
+              Visit <span className="text-white/50">localhost:3000/#tagger</span> to tag images.
+            </p>
+          </div>
+        ) : (
+          <LayoutGroup>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+              {activeCategories.map((cat, i) => (
+                <motion.div
+                  key={cat}
+                  layout
+                  className={i % 2 === 1 ? 'md:mt-24' : ''}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <CoverCard
+                    category={cat}
+                    images={imagesByCategory[cat]}
+                    index={i}
+                    onClick={() => setOpenCategory(cat)}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </LayoutGroup>
+        )}
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Collection Viewer Overlay */}
       <AnimatePresence>
-        {lightboxIndex !== null && (
-          <Lightbox
-            projects={filtered}
-            currentIndex={lightboxIndex}
-            onClose={() => setLightboxIndex(null)}
-            onNext={nextImage}
-            onPrev={prevImage}
+        {openCategory && (
+          <CollectionViewer
+            category={openCategory}
+            images={imagesByCategory[openCategory]}
+            onClose={() => setOpenCategory(null)}
           />
         )}
       </AnimatePresence>
@@ -504,88 +645,98 @@ const Gallery = () => {
   );
 };
 
-// --- 4.3 Services Section with Pricing ---
+// --- 4.3 About + Services ---
 
 const About = () => {
-  const serviceCards = [
-    {
-      title: "Tech Events",
-      desc: "Event coverage, keynotes, demos",
-      price: "Starting at $500",
-    },
-    {
-      title: "Portraits",
-      desc: "Headshots, creative portraits, lifestyle",
-      price: "Starting at $250",
-    },
-    {
-      title: "Culture & Editorial",
-      desc: "Community events, brand storytelling",
-      price: "Starting at $400",
-    },
-  ];
-
   return (
     <section id="about" className="py-24 px-6 bg-white text-studio-black relative z-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
         <div className="md:col-span-4">
-          <h2 className="font-display text-4xl font-medium mb-8">THE PHOTOGRAPHER</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <GeoStar size={12} className="text-black/25" />
+            <span className="font-mono text-[9px] tracking-[0.25em] text-black/30 uppercase">THE APPROACH</span>
+          </div>
+          <h2 className="font-display text-3xl md:text-4xl font-medium mb-8">THE ART OF NOTICING</h2>
           <p className="font-mono text-xs uppercase tracking-wide opacity-60">
-            Billy N. | Chicago, IL<br/>
-            Available for Bookings
+            Billy Ndizeye | Chicago, IL<br/>
+            Photographer &amp; Connector
           </p>
         </div>
         <div className="md:col-span-8">
-          <p className="font-sans text-2xl md:text-4xl leading-tight font-light mb-12">
-            I live where <span className="italic font-serif">tech</span> meets <span className="italic font-serif">culture</span>. Startup demo days, intimate portraits, community moments — I capture the people and energy driving Chicago forward.
+          <p className="font-sans text-xl md:text-2xl lg:text-4xl leading-tight font-light">
+            I believe the most important stories aren't just told&mdash;they are <span className="italic font-serif">felt</span>. Based in Chicago, I document the quiet intersections of people, culture, and community. Through a lens of respect and curiosity, I capture the moments that define who we are when we are most ourselves.
           </p>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-          {/* Service Cards with Pricing */}
-          <div id="services" className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {serviceCards.map((service) => (
-              <div key={service.title} className="border border-black/10 p-6 hover:border-black/30 transition-colors group">
-                <h4 className="font-display text-xl font-medium mb-2">{service.title}</h4>
-                <p className="font-sans text-sm text-black/60 mb-4">{service.desc}</p>
-                <p className="font-mono text-xs uppercase tracking-wider text-black/40 mb-6">{service.price}</p>
-                <a
-                  href={`mailto:billy@kivarastudios.dev?subject=Quote Request: ${service.title}&body=Hi Billy, I'd like to request a quote for ${service.title.toLowerCase()} services.`}
-                  className="font-mono text-xs uppercase tracking-wider text-black hover:text-black/60 transition-colors inline-flex items-center gap-1 group-hover:gap-2"
-                >
-                  Request a Quote <ArrowUpRight size={12} />
-                </a>
-              </div>
+const Services = () => {
+  const services = [
+    {
+      title: "Event Coverage",
+      desc: "From high-energy tech summits to intimate community gatherings, I capture the pulse of the event. I focus on the candid interactions and the \"unscripted\" moments that truly represent your organization's culture.",
+      tags: ["Corporate", "Tech", "Social", "Non-Profit"],
+    },
+    {
+      title: "Human-Centered Portraits",
+      desc: "A portrait should feel like a conversation. Whether it's a professional headshot or a creative lifestyle session, my goal is to capture your presence\u2014the version of you that is authentic, relaxed, and real.",
+      tags: ["Indoor", "Outdoor", "Studio", "Creative"],
+    },
+    {
+      title: "Narrative Editorial & Brand Content",
+      desc: "Visual storytelling for brands that lead with heart. I work with founders and creatives to build a visual archive that reflects their mission, their space, and their impact on the community.",
+      tags: ["Brand", "Editorial", "Lifestyle", "Campaign"],
+    },
+    {
+      title: "Creative Direction",
+      desc: "For projects that require a deeper level of vision. I partner with organizations to conceptualize and execute visual campaigns that resonate on a human level, ensuring every image serves the broader story.",
+      tags: ["Concept", "Campaign", "Visual Identity", "Art Direction"],
+    },
+  ];
+
+  return (
+    <section id="services" className="py-24 px-6 bg-white text-studio-black border-t border-black/10 relative z-10">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+          <div className="md:col-span-4">
+            <div className="flex items-center gap-2 mb-4">
+              <GeoCross size={12} className="text-black/25" />
+              <span className="font-mono text-[9px] tracking-[0.25em] text-black/30 uppercase">SERVICES</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-medium mb-4">WAYS WE WORK TOGETHER</h2>
+          </div>
+          <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((s, i) => (
+              <motion.div
+                key={s.title}
+                className="border-t border-black/10 pt-6 group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                <span className="font-mono text-[10px] text-black/30 uppercase tracking-wider">{String(i + 1).padStart(2, '0')}</span>
+                <h4 className="font-display text-xl font-medium mt-2 mb-3">{s.title}</h4>
+                <p className="font-sans text-sm text-black/60 leading-relaxed mb-3">{s.desc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {s.tags.map(tag => (
+                    <span key={tag} className="font-mono text-[10px] uppercase tracking-wider text-black/40 border border-black/15 px-2 py-0.5 rounded-full">{tag}</span>
+                  ))}
+                </div>
+              </motion.div>
             ))}
           </div>
+        </div>
 
-          {/* Existing Services/Spaces/Clients lists */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-black/10 pt-12">
-            <div>
-              <h4 className="font-mono text-xs uppercase mb-4 opacity-50">Services</h4>
-              <ul className="space-y-2 font-display text-lg">
-                <li className="hover:translate-x-2 transition-transform cursor-default">Event Coverage</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Portraits</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Brand Content</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Creative Direction</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-mono text-xs uppercase mb-4 opacity-50">Spaces</h4>
-              <ul className="space-y-2 font-display text-lg">
-                <li className="hover:translate-x-2 transition-transform cursor-default">Tech Events</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Startup Culture</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Community</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Lifestyle</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-mono text-xs uppercase mb-4 opacity-50">Clients</h4>
-              <ul className="space-y-2 font-display text-lg">
-                <li className="hover:translate-x-2 transition-transform cursor-default">Founders</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Creatives</li>
-                <li className="hover:translate-x-2 transition-transform cursor-default">Organizations</li>
-              </ul>
-            </div>
-          </div>
+        <div className="text-center border-t border-black/10 pt-12">
+          <a
+            href="mailto:billy@kivarastudios.dev?subject=Let's Work Together"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-black hover:text-black/60 transition-colors no-underline"
+          >
+            Start a conversation <ArrowUpRight size={14} />
+          </a>
         </div>
       </div>
     </section>
@@ -624,20 +775,18 @@ const Headshot = () => {
     <section className="py-24 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* TODO: Replace with Billy's real headshot image */}
           <motion.div
-            className="aspect-[3/4] bg-white/5 border border-white/10 flex flex-col items-center justify-center overflow-hidden"
+            className="aspect-[3/4] bg-white/5 border border-white/10 overflow-hidden"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-              <div className="w-28 h-28 rounded-full bg-white/10 flex items-center justify-center">
-                <span className="font-display text-4xl font-medium text-white/40">BN</span>
-              </div>
-              <span className="font-mono text-xs text-white/20 uppercase tracking-widest">Photo coming soon</span>
-            </div>
+            <img
+              src="/billy-headshot.jpg"
+              alt="Billy Ndizeye - Photographer"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-700 hover:saturate-[1.15] hover:contrast-[1.05]"
+            />
           </motion.div>
 
           <motion.div
@@ -646,15 +795,24 @@ const Headshot = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <p className="font-mono text-xs uppercase tracking-widest text-white/50 mb-6">The Person</p>
-            <h3 className="font-display text-4xl md:text-5xl font-light tracking-tight mb-8">
-              NICE TO<br/>MEET YOU.
+            <p className="font-mono text-xs uppercase tracking-widest text-white/50 mb-6">Beyond the Frame</p>
+            <h3 className="font-display text-3xl md:text-4xl lg:text-5xl font-light tracking-tight mb-2">
+              MY NAME IS<br/>BILLY NDIZEYE.
             </h3>
-            <p className="font-sans text-lg text-white/70 leading-relaxed mb-6">
-              I'm Billy — a photographer, technologist, and community builder based in Chicago. I started BJN Photography because I saw a gap: the people shaping our city's tech and creative scenes deserved imagery that matched their energy.
+            <p className="font-mono text-[11px] text-white/35 tracking-wide mb-8 italic">
+              Pronounced /n&middot;dee&middot;zay&middot;ey/ &mdash; Translation: &ldquo;I hope&rdquo; (Kinyarwanda)
             </p>
-            <p className="font-sans text-lg text-white/70 leading-relaxed">
-              Whether it's a packed demo day, a quiet portrait session, or the controlled chaos of a launch event — I'm there to make sure the moment lives beyond the room.
+            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
+              I started photography in college as a curiosity. After graduation, I gifted myself my first professional camera and decided to pay closer attention to the life happening around me.
+            </p>
+            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
+              I use my lens to capture rooms and people. Not only how they look, but how they feel. The pause before someone speaks. The way people lean in when an idea lands. The laughter that loosens the air. The steady confidence in the self portraits. And the moments that rarely make the recap, but document the night.
+            </p>
+            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
+              My work is shaped by my career, and I see myself as a connector first, photographer second. Technology and economic development put me in spaces where the future gets built in real time, one conversation at a time. Photography became my way of honoring those scenes with care and accuracy, without turning people into content.
+            </p>
+            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
+              I'm here to capture the human stories that show us who we are at our best.
             </p>
           </motion.div>
         </div>
@@ -666,46 +824,48 @@ const Headshot = () => {
 // --- 4.6 Horizontal Scroll Culture Strip ---
 
 const CultureStrip = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-40%"]);
-
-  // TODO: Replace with real Chicago culture photos
   const images = [
-    { src: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2070&auto=format&fit=crop", alt: "Chicago Architecture" },
-    { src: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=2070&auto=format&fit=crop", alt: "Concert crowd" },
-    { src: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=2070&auto=format&fit=crop", alt: "Street art" },
-    { src: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2070&auto=format&fit=crop", alt: "Community gathering" },
-    { src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop", alt: "Night event" },
+    { src: "/creative/PPGS5426_2.jpg", alt: "Autumn editorial" },
+    { src: "/events/SEAN0055.jpg", alt: "Rooftop event" },
+    { src: "/creative/PPGS5541.jpg", alt: "Fall fashion" },
+    { src: "/events/11-SSUC9688.jpg", alt: "Chicago Marathon" },
+    { src: "/creative/PPGS5242.jpg", alt: "Pumpkin portrait" },
+    { src: "/events/SEAN0007.jpg", alt: "DJ set" },
+    { src: "/creative/PPGS5490.jpg", alt: "Berry season" },
+    { src: "/events/SSUC2669.jpg", alt: "Holiday soiree" },
+    { src: "/creative/PPGS5442.jpg", alt: "Creative portrait" },
   ];
 
+  // Duplicate for seamless loop
+  const doubled = [...images, ...images];
+
   return (
-    <section ref={sectionRef} className="py-24 relative z-10 culture-scroll overflow-hidden">
+    <section className="py-24 relative z-10 overflow-hidden">
       <div className="px-6 mb-12 max-w-7xl mx-auto">
-        <h2 className="font-display text-5xl md:text-7xl font-light tracking-tighter">THE CULTURE</h2>
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/40 mt-2">CHICAGO'S CREATIVE SCENE</p>
+        <h2 className="font-display text-3xl md:text-5xl lg:text-7xl font-light tracking-tighter">THE CULTURE</h2>
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/40 mt-2">STORIES FROM THE CITY</p>
+        <div className="flex items-center gap-2 mt-3">
+          <GeoCompass size={14} className="text-white/30" />
+          <span className="font-mono text-[9px] tracking-[0.25em] text-white/30 uppercase">&quot;BELONGING&quot; SERIES &mdash; 2024&ndash;ONGOING</span>
+        </div>
       </div>
 
-      <motion.div
-        className="flex gap-4 md:gap-6 pl-6"
-        style={{ x }}
-      >
-        {images.map((img, i) => (
-          <div
-            key={i}
-            className="flex-shrink-0 w-[70vw] md:w-[40vw] aspect-[16/9] overflow-hidden"
-          >
-            <BlurImage
-              src={img.src}
-              alt={img.alt}
-              className="grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
-            />
-          </div>
-        ))}
-      </motion.div>
+      <div className="culture-carousel">
+        <div className="culture-carousel-track">
+          {doubled.map((img, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 w-[70vw] md:w-[40vw] aspect-[16/9] overflow-hidden"
+            >
+              <BlurImage
+                src={img.src}
+                alt={img.alt}
+                className="grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
@@ -764,128 +924,200 @@ const BookingForm = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    shootType: 'Event',
-    date: '',
+    organization: '',
+    interest: 'Event Coverage',
+    message: '',
   });
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Booking Request: ${form.shootType} Shoot`);
+    const subject = encodeURIComponent(`Inquiry: ${form.interest}`);
     const body = encodeURIComponent(
-      `Hi Billy,\n\nI'd like to book a shoot.\n\nName: ${form.name}\nEmail: ${form.email}\nShoot Type: ${form.shootType}\nPreferred Date: ${form.date}\n\nLooking forward to hearing from you!`
+      `Hi Billy,\n\nMy name is ${form.name}${form.organization ? ` with ${form.organization}` : ''}.\n\nI'm interested in: ${form.interest}\n\n${form.message}\n\nBest,\n${form.name}\n${form.email}`
     );
     window.location.href = `mailto:billy@kivarastudios.dev?subject=${subject}&body=${body}`;
   };
 
+  const inputClass = "w-full bg-white/5 border border-white/10 px-4 py-3 font-mono text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none transition-colors";
+
   return (
-    <form onSubmit={handleSubmit} className="bg-studio-black p-8 border border-white/10 space-y-6">
-      <div className="flex justify-between items-start mb-4">
+    <form onSubmit={handleSubmit} className="bg-studio-black p-8 border border-white/10 space-y-5">
+      <div className="flex justify-between items-start mb-2">
         <span className="font-mono text-xs px-2 py-1 border border-white/20 rounded-full bg-white/5 flex items-center gap-2">
           <Camera size={14} />
-          Book a Shoot
+          Inquire
         </span>
       </div>
-      <h3 className="font-display text-2xl mb-6">Let's Create Together</h3>
+      <h3 className="font-display text-2xl mb-2">Tell Me About Your Story</h3>
+      <p className="font-mono text-[11px] text-white/40 leading-relaxed">Every project starts with a conversation. Share a bit about what you're envisioning.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Your Name"
-          required
-          value={form.name}
-          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-          className="bg-white/5 border border-white/10 px-4 py-3 font-mono text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none transition-colors"
-        />
-        <input
-          type="email"
-          placeholder="Your Email"
-          required
-          value={form.email}
-          onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-          className="bg-white/5 border border-white/10 px-4 py-3 font-mono text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none transition-colors"
-        />
-        <select
-          value={form.shootType}
-          onChange={e => setForm(f => ({ ...f, shootType: e.target.value }))}
-          className="bg-white/5 border border-white/10 px-4 py-3 font-mono text-sm text-white focus:border-white/40 focus:outline-none transition-colors appearance-none"
-        >
-          <option value="Event" className="bg-studio-black">Event</option>
-          <option value="Portrait" className="bg-studio-black">Portrait</option>
-          <option value="Brand" className="bg-studio-black">Brand</option>
-          <option value="Other" className="bg-studio-black">Other</option>
-        </select>
-        <input
-          type="date"
-          value={form.date}
-          onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-          className="bg-white/5 border border-white/10 px-4 py-3 font-mono text-sm text-white focus:border-white/40 focus:outline-none transition-colors"
-        />
-      </div>
+      <input
+        type="text"
+        placeholder="Your Name"
+        required
+        value={form.name}
+        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+        className={inputClass}
+      />
+      <input
+        type="email"
+        placeholder="Your Email"
+        required
+        value={form.email}
+        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+        className={inputClass}
+      />
+      <input
+        type="text"
+        placeholder="Organization (optional)"
+        value={form.organization}
+        onChange={e => setForm(f => ({ ...f, organization: e.target.value }))}
+        className={inputClass}
+      />
+      <select
+        value={form.interest}
+        onChange={e => setForm(f => ({ ...f, interest: e.target.value }))}
+        className={`${inputClass} appearance-none`}
+      >
+        <option value="Event Coverage" className="bg-studio-black">Event Coverage</option>
+        <option value="Human-Centered Portraits" className="bg-studio-black">Human-Centered Portraits</option>
+        <option value="Editorial & Brand Content" className="bg-studio-black">Editorial & Brand Content</option>
+        <option value="Creative Direction" className="bg-studio-black">Creative Direction</option>
+        <option value="Something Else" className="bg-studio-black">Something Else</option>
+      </select>
+      <textarea
+        placeholder="Tell me a bit about your project, your vision, or what you're hoping to capture..."
+        value={form.message}
+        onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+        rows={4}
+        className={`${inputClass} resize-none`}
+      />
 
       <button
         type="submit"
         className="w-full bg-white text-black font-mono text-xs uppercase tracking-wider py-4 hover:bg-white/90 transition-colors cursor-pointer"
       >
-        Send Booking Request
+        Start the Conversation
       </button>
     </form>
   );
 };
 
 const Connect = () => {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    organization: '',
+    interest: '',
+    date: '',
+    location: '',
+    guestCount: '',
+    message: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Inquiry: ${form.interest || 'New Project'}`);
+    const body = encodeURIComponent(
+      `Hi Billy,\n\nMy name is ${form.name}${form.organization ? ` with ${form.organization}` : ''}.\n\nI'm interested in: ${form.interest || 'Not specified'}\nPreferred date: ${form.date || 'Flexible'}\nLocation: ${form.location || 'TBD'}\nEstimated guests: ${form.guestCount || 'N/A'}\n\n${form.message}\n\nBest,\n${form.name}\n${form.email}`
+    );
+    window.location.href = `mailto:billy@kivarastudios.dev?subject=${subject}&body=${body}`;
+    setSubmitted(true);
+  };
+
+  const inputClass = "w-full bg-white/5 border border-white/10 px-4 py-3.5 font-mono text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none transition-colors";
+
   return (
     <section id="community" className="py-24 px-6 border-b border-white/10 relative z-10">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
-          <h2 className="font-display text-6xl md:text-7xl font-light tracking-tighter">LET'S<br/>CONNECT</h2>
+          <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-light tracking-tighter">LET'S START A<br/><span className="italic">CONVERSATION.</span></h2>
           <div className="max-w-md">
-            <p className="text-white/70 font-mono text-sm leading-relaxed">Ready to work together or just want to say what's up? Pick your lane.</p>
+            <p className="text-white/70 font-sans text-sm md:text-base leading-relaxed">Have a story that needs to be kept? Or a project that needs a thoughtful eye? I'd love to hear what you're building and how we can document it together.</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
-          {/* Inline Booking Form replaces first card */}
-          <BookingForm />
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="md:col-span-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Name *</label>
+                  <input type="text" required placeholder="Your full name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className={inputClass} />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Email *</label>
+                  <input type="email" required placeholder="your@email.com" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className={inputClass} />
+                </div>
+              </div>
 
-          {/* Instagram */}
-          <motion.a
-            href="#" // TODO: Replace with real Instagram URL
-            className="bg-studio-black p-8 hover:bg-white/5 transition-colors cursor-pointer group relative overflow-hidden block no-underline text-white"
-            whileHover={{ y: -5 }}
-            aria-label="Instagram"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowUpRight size={20} />
-            </div>
-            <div className="flex justify-between items-start mb-12">
-              <span className="font-mono text-xs px-2 py-1 border border-white/20 rounded-full bg-white/5 flex items-center gap-2">
-                <Instagram size={14} />
-                Follow Along
-              </span>
-            </div>
-            <h3 className="font-display text-2xl group-hover:underline decoration-1 underline-offset-4 mb-2">Behind the Scenes</h3>
-            <p className="font-mono text-xs text-white/40">Work in progress, BTS moments, and the Chicago creative scene.</p>
-          </motion.a>
+              <div>
+                <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Organization</label>
+                <input type="text" placeholder="Company, brand, or organization name" value={form.organization} onChange={e => setForm(f => ({ ...f, organization: e.target.value }))} className={inputClass} />
+              </div>
 
-          {/* LinkedIn */}
-          <motion.a
-            href="#" // TODO: Replace with real LinkedIn URL
-            className="bg-studio-black p-8 hover:bg-white/5 transition-colors cursor-pointer group relative overflow-hidden block no-underline text-white"
-            whileHover={{ y: -5 }}
-            aria-label="LinkedIn"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowUpRight size={20} />
+              <div>
+                <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">What are you looking for? *</label>
+                <select required value={form.interest} onChange={e => setForm(f => ({ ...f, interest: e.target.value }))} className={`${inputClass} appearance-none`}>
+                  <option value="" className="bg-studio-black">Select a service</option>
+                  <option value="Event Coverage" className="bg-studio-black">Event Coverage</option>
+                  <option value="Human-Centered Portraits" className="bg-studio-black">Human-Centered Portraits</option>
+                  <option value="Editorial & Brand Content" className="bg-studio-black">Editorial & Brand Content</option>
+                  <option value="Creative Direction" className="bg-studio-black">Creative Direction</option>
+                  <option value="Something Else" className="bg-studio-black">Something Else</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Preferred Date</label>
+                  <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className={inputClass} />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Location</label>
+                  <input type="text" placeholder="City or venue" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} className={inputClass} />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Est. Guests</label>
+                  <input type="text" placeholder="e.g. 50-100" value={form.guestCount} onChange={e => setForm(f => ({ ...f, guestCount: e.target.value }))} className={inputClass} />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Tell me about your project</label>
+                <textarea placeholder="Share a bit about your vision, the vibe you're going for, or anything else that feels important..." value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} rows={5} className={`${inputClass} resize-none`} />
+              </div>
+
+              <button type="submit" className="w-full bg-white text-black font-mono text-xs uppercase tracking-wider py-4 hover:bg-white/90 transition-colors cursor-pointer">
+                {submitted ? 'Opening Email...' : 'Send Inquiry'}
+              </button>
+            </form>
+          </div>
+
+          <div className="md:col-span-4 md:pl-8 md:border-l md:border-white/10">
+            <div className="md:sticky md:top-32 space-y-8">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Email</p>
+                <a href="mailto:billy@kivarastudios.dev" className="font-mono text-sm text-white/70 hover:text-white transition-colors no-underline">billy@kivarastudios.dev</a>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Based in</p>
+                <p className="font-mono text-sm text-white/70">Chicago, IL</p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-3">Follow</p>
+                <div className="flex flex-col gap-3">
+                  <a href="#" className="flex items-center gap-2.5 font-mono text-sm text-white/60 hover:text-white transition-colors no-underline">
+                    <Instagram size={16} /> Instagram
+                  </a>
+                  <a href="#" className="flex items-center gap-2.5 font-mono text-sm text-white/60 hover:text-white transition-colors no-underline">
+                    <Linkedin size={16} /> LinkedIn
+                  </a>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between items-start mb-12">
-              <span className="font-mono text-xs px-2 py-1 border border-white/20 rounded-full bg-white/5 flex items-center gap-2">
-                <Users size={14} />
-                Connect
-              </span>
-            </div>
-            <h3 className="font-display text-2xl group-hover:underline decoration-1 underline-offset-4 mb-2">Let's Link Up</h3>
-            <p className="font-mono text-xs text-white/40">Professional inquiries, collaborations, and community.</p>
-          </motion.a>
+          </div>
         </div>
       </div>
     </section>
@@ -900,7 +1132,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto flex flex-col justify-between min-h-[50vh]">
         <div>
           <a href="mailto:billy@kivarastudios.dev" className="block no-underline text-white">
-            <h2 className="font-display text-[10vw] leading-none tracking-tighter text-white/20 hover:text-white transition-colors duration-500 cursor-pointer">
+            <h2 className="font-display text-5xl md:text-[10vw] leading-none tracking-tighter text-white/20 hover:text-white transition-colors duration-500 cursor-pointer">
               BOOK A SHOOT
             </h2>
           </a>
@@ -922,10 +1154,19 @@ const Footer = () => {
           </div>
 
           <div className="text-right font-mono text-xs text-white/40">
-            <p className="text-white/20 mb-2 uppercase tracking-[0.2em]">Selected Clients: 1871 &bull; ChiStartup Hub &bull; World Business Chicago</p>
             <p>&copy; 2026 BJN PHOTOGRAPHY.</p>
             <p>CHICAGO, IL.</p>
             <p className="mt-2">ALL IMAGES COPYRIGHTED.</p>
+
+            {/* Technical property stamp */}
+            <div className="flex items-center gap-3 justify-end mt-6 pt-4 border-t border-white/10">
+              <div className="text-right text-[9px] tracking-[0.25em] text-white/25 leading-relaxed uppercase">
+                <span>MADE WITH PRESENCE</span><br />
+                <span>BJN PHOTOGRAPHY</span><br />
+                <span>CHICAGO, ILLINOIS</span>
+              </div>
+              <GeoCross size={18} className="text-white/20" />
+            </div>
           </div>
         </div>
       </div>
@@ -991,15 +1232,35 @@ const NoiseOverlay = () => {
   );
 };
 
+const SpeedLines = () => (
+  <div className="fixed inset-0 z-[45] pointer-events-none overflow-hidden">
+    <div className="speed-line speed-line-1" />
+    <div className="speed-line speed-line-2" />
+    <div className="speed-line speed-line-3" />
+  </div>
+);
+
 // --- Main App with Final Section Order ---
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [isTagger, setIsTagger] = useState(window.location.hash === '#tagger');
+  const [openCategory, setOpenCategory] = useState<GalleryCategory | null>(null);
+
+  useEffect(() => {
+    const onHash = () => setIsTagger(window.location.hash === '#tagger');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  // Dev-only tagger route
+  if (isTagger) return <Tagger />;
 
   return (
     <div className="bg-studio-black min-h-screen text-white selection:bg-white selection:text-black relative overflow-x-hidden">
       <Cursor />
       <NoiseOverlay />
+      <SpeedLines />
       <AnimatePresence>
         {loading && <Loader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
@@ -1007,23 +1268,22 @@ export default function App() {
       {!loading && (
         <>
           <GridBackground />
-          <Header />
+          <Header hidden={openCategory !== null} />
           <main role="main">
             {/* 1. Hero */}
             <Hero />
-            {/* 2. About (with enhanced services cards) */}
+            {/* 2. About */}
             <About />
-            {/* 3. Social Proof Marquee */}
-            <SocialProof />
+            {/* 3. Social Proof Marquee (removed) */}
             {/* 4. Headshot */}
             <Headshot />
-            {/* 5. Gallery (with filter + lightbox) */}
-            <Gallery />
+            {/* 5. Gallery (bento grid with category sections) */}
+            <BentoGallery openCategory={openCategory} setOpenCategory={setOpenCategory} />
+            {/* 5b. Services */}
+            <Services />
             {/* 6. Culture Strip (horizontal scroll) */}
             <CultureStrip />
-            {/* 7. Testimonials */}
-            <Testimonials />
-            {/* 8. Connect (with inline booking form) */}
+            {/* 7. Connect */}
             <Connect />
           </main>
           {/* 9. Footer (with selected clients) */}

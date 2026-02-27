@@ -49,6 +49,31 @@ body {
   animation-play-state: paused;
 }
 
+/* Virgil Abloh micrographics + high-motion blur lines */
+@keyframes speed-sweep {
+  0% { transform: translateX(-100vw); }
+  100% { transform: translateX(100vw); }
+}
+
+@keyframes micro-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.speed-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), rgba(255,255,255,0.3), rgba(255,255,255,0.15), transparent);
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+
+.speed-line-1 { animation: speed-sweep 7s linear infinite; top: 15%; width: 18vw; }
+.speed-line-2 { animation: speed-sweep 11s linear infinite; animation-delay: 3s; top: 48%; width: 25vw; }
+.speed-line-3 { animation: speed-sweep 5s linear infinite; animation-delay: 6s; top: 76%; width: 14vw; }
+
+.micro-drift { animation: micro-drift 5s ease-in-out infinite; }
+
 /* Blur-up image placeholder */
 .blur-up {
   filter: blur(20px);
@@ -61,9 +86,31 @@ body {
   opacity: 1;
 }
 
-/* Horizontal scroll culture section */
-.culture-scroll {
+/* Culture strip auto-scrolling carousel */
+.culture-carousel {
   overflow: hidden;
+}
+
+@keyframes culture-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.culture-carousel-track {
+  display: flex;
+  gap: 1rem;
+  animation: culture-scroll 40s linear infinite;
+  padding-left: 1.5rem;
+}
+
+.culture-carousel:hover .culture-carousel-track {
+  animation-play-state: paused;
+}
+
+@media (min-width: 768px) {
+  .culture-carousel-track {
+    gap: 1.5rem;
+  }
 }
 
 /* Accessibility: reduce motion for users who prefer it */
@@ -75,7 +122,8 @@ body {
     scroll-behavior: auto !important;
   }
 
-  .marquee-track {
+  .marquee-track,
+  .culture-carousel-track {
     animation: none !important;
   }
 }
