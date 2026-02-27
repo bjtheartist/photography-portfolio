@@ -4,6 +4,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Tagger from './Tagger';
 import { galleryImages, GALLERY_CATEGORIES, type GalleryImage, type GalleryCategory } from './data/galleryImages';
 
+// --- Asset path helper (GitHub Pages base path) ---
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+
 // --- Geometric Micrographic Symbols ---
 
 const GeoStar = ({ size = 20, className = '' }: { size?: number; className?: string }) => (
@@ -228,12 +231,12 @@ const Header = ({ hidden }: { hidden?: boolean }) => {
 
 const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=2070&auto=format&fit=crop',
-  '/hero/SEAN9753.jpg',
-  '/hero/IMG_2511.jpg',
-  '/hero/IMG_9784.jpg',
-  '/hero/IMG_9768.jpg',
-  '/hero/IMG_9441.jpg',
-  '/hero/IMG_6535.jpg',
+  assetUrl('/hero/SEAN9753.jpg'),
+  assetUrl('/hero/IMG_2511.jpg'),
+  assetUrl('/hero/IMG_9784.jpg'),
+  assetUrl('/hero/IMG_9768.jpg'),
+  assetUrl('/hero/IMG_9441.jpg'),
+  assetUrl('/hero/IMG_6535.jpg'),
 ];
 
 const Hero = () => {
@@ -334,12 +337,13 @@ const Hero = () => {
 
 const BlurImage = ({ src, alt, className = '' }: { src: string; alt: string; className?: string }) => {
   const [loaded, setLoaded] = useState(false);
+  const resolvedSrc = src.startsWith('http') ? src : assetUrl(src);
 
   return (
     <div className="relative w-full h-full overflow-hidden">
       <div className={`absolute inset-0 bg-white/5 ${loaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-600`} />
       <img
-        src={src}
+        src={resolvedSrc}
         alt={alt}
         loading="lazy"
         decoding="async"
@@ -485,7 +489,7 @@ const CollectionViewer = ({ category, images, onClose }: {
                 transition={{ duration: 0.3 }}
               >
                 <img
-                  src={images[lightboxIndex].src}
+                  src={assetUrl(images[lightboxIndex].src)}
                   alt={images[lightboxIndex].alt}
                   className="max-h-[80vh] max-w-full object-contain"
                   referrerPolicy="no-referrer"
@@ -783,7 +787,7 @@ const Headshot = () => {
             transition={{ duration: 0.8 }}
           >
             <img
-              src="/billy-headshot.jpg"
+              src={assetUrl('/billy-headshot.jpg')}
               alt="Billy Ndizeye - Photographer"
               className="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-700 hover:saturate-[1.15] hover:contrast-[1.05]"
             />
@@ -1016,14 +1020,24 @@ const Connect = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Inquiry: ${form.interest || 'New Project'}`);
-    const body = encodeURIComponent(
-      `Hi Billy,\n\nMy name is ${form.name}${form.organization ? ` with ${form.organization}` : ''}.\n\nI'm interested in: ${form.interest || 'Not specified'}\nPreferred date: ${form.date || 'Flexible'}\nLocation: ${form.location || 'TBD'}\nEstimated guests: ${form.guestCount || 'N/A'}\n\n${form.message}\n\nBest,\n${form.name}\n${form.email}`
-    );
-    window.location.href = `mailto:billy@kivarastudios.dev?subject=${subject}&body=${body}`;
     setSubmitted(true);
+    const formData = new FormData();
+    formData.append('name', form.name);
+    formData.append('email', form.email);
+    formData.append('organization', form.organization);
+    formData.append('interest', form.interest);
+    formData.append('date', form.date);
+    formData.append('location', form.location);
+    formData.append('guestCount', form.guestCount);
+    formData.append('message', form.message);
+    formData.append('_subject', `New Inquiry: ${form.interest || 'Project'}`);
+    formData.append('_template', 'table');
+    await fetch('https://formsubmit.co/ajax/billy@kivarastudios.dev', {
+      method: 'POST',
+      body: formData,
+    });
   };
 
   const inputClass = "w-full bg-white/5 border border-white/10 px-4 py-3.5 font-mono text-sm text-white placeholder:text-white/30 focus:border-white/30 focus:outline-none transition-colors";
@@ -1089,8 +1103,8 @@ const Connect = () => {
                 <textarea placeholder="Share a bit about your vision, the vibe you're going for, or anything else that feels important..." value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} rows={5} className={`${inputClass} resize-none`} />
               </div>
 
-              <button type="submit" className="w-full bg-white text-black font-mono text-xs uppercase tracking-wider py-4 hover:bg-white/90 transition-colors cursor-pointer">
-                {submitted ? 'Opening Email...' : 'Send Inquiry'}
+              <button type="submit" disabled={submitted} className={`w-full font-mono text-xs uppercase tracking-wider py-4 transition-colors cursor-pointer ${submitted ? 'bg-green-500 text-white' : 'bg-white text-black hover:bg-white/90'}`}>
+                {submitted ? 'Sent — I\'ll Be in Touch!' : 'Send Inquiry'}
               </button>
             </form>
           </div>
