@@ -701,22 +701,22 @@ const Services = () => {
   const services = [
     {
       title: "Event Coverage",
-      desc: "The keynote everyone remembers. The handshake that sealed it. The dance floor at midnight. I document events the way they actually felt\u2014not staged, not stiff, just the real energy of the room.",
+      desc: "From high-energy tech summits to intimate community gatherings, I capture the pulse of the event. I focus on the candid interactions and the \"unscripted\" moments that truly represent your organization's culture.",
       tags: ["Corporate", "Tech", "Social", "Non-Profit"],
     },
     {
       title: "Human-Centered Portraits",
-      desc: "No awkward posing, no forced smiles. Just you, at ease, looking like the person your people already know. Whether it\u2019s a headshot or a full creative session, we\u2019ll make something that actually feels like you.",
+      desc: "A portrait should feel like a conversation. Whether it's a professional headshot or a creative lifestyle session, my goal is to capture your presence\u2014the version of you that is authentic, relaxed, and real.",
       tags: ["Indoor", "Outdoor", "Studio", "Creative"],
     },
     {
-      title: "Editorial & Brand Content",
-      desc: "For the founders, organizers, and creators who need visuals that match the weight of their work. I build image libraries that tell your story with the same intention you put into building it.",
+      title: "Narrative Editorial & Brand Content",
+      desc: "Visual storytelling for brands that lead with heart. I work with founders and creatives to build a visual archive that reflects their mission, their space, and their impact on the community.",
       tags: ["Brand", "Editorial", "Lifestyle", "Campaign"],
     },
     {
       title: "Creative Direction",
-      desc: "When the project needs more than a photographer\u2014it needs a point of view. I collaborate on concept, styling, and visual strategy to make sure every frame is pulling in the same direction.",
+      desc: "For projects that require a deeper level of vision. I partner with organizations to conceptualize and execute visual campaigns that resonate on a human level, ensuring every image serves the broader story.",
       tags: ["Concept", "Campaign", "Visual Identity", "Art Direction"],
     },
   ];
