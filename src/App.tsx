@@ -807,13 +807,13 @@ const Headshot = () => {
               Pronounced /n&middot;dee&middot;zay&middot;ey/ &mdash; Translation: &ldquo;I hope&rdquo; (Kinyarwanda)
             </p>
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
-              I started photography in college as a curiosity. After graduation, I gifted myself my first professional camera and decided to pay closer attention to the life happening around me.
+              I started photography in 2022 out of curiosity. After graduating college, I gifted myself my first professional camera and decided to pay closer attention to the life happening around me.
             </p>
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
-              I use my lens to capture rooms and people. Not only how they look, but how they feel. The pause before someone speaks. The way people lean in when an idea lands. The laughter that loosens the air. The steady confidence in the self portraits. And the moments that rarely make the recap, but document the night.
+              I use my lens to capture rooms and people, not only how they look, but how they feel. The pause before someone speaks. The way people lean in when an idea lands. The laughter that loosens the air. The steady confidence of a self-portrait. The images that rarely make the recap, but document the moment as it is.
             </p>
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
-              My work is shaped by my career, and I see myself as a connector first, photographer second. Technology and economic development put me in spaces where the future gets built in real time, one conversation at a time. Photography became my way of honoring those scenes with care and accuracy, without turning people into content.
+              I see myself as a connector first and a photographer second. My work is shaped by my career in technology and economic development. It's put me in spaces where the future gets built in real time, one conversation at a time. Photography became my way of honoring those scenes with care and accuracy, without turning people into content.
             </p>
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
               I'm here to capture the human stories that show us who we are at our best.
