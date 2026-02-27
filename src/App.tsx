@@ -374,9 +374,28 @@ const CollectionViewer = ({ category, images, onClose }: {
     setLightboxIndex((lightboxIndex - 1 + images.length) % images.length);
   }, [lightboxIndex, images.length]);
 
+  // Touch swipe state
+  const touchStart = useRef<number | null>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null || lightboxIndex === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextImage();
+      else prevImage();
+    }
+    touchStart.current = null;
+  }, [lightboxIndex, nextImage, prevImage]);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && lightboxIndex === null) onClose();
+      if (e.key === 'ArrowRight' && lightboxIndex !== null) nextImage();
+      if (e.key === 'ArrowLeft' && lightboxIndex !== null) prevImage();
     };
     window.addEventListener('keydown', handler);
     document.body.style.overflow = 'hidden';
@@ -384,7 +403,7 @@ const CollectionViewer = ({ category, images, onClose }: {
       window.removeEventListener('keydown', handler);
       document.body.style.overflow = '';
     };
-  }, [onClose, lightboxIndex]);
+  }, [onClose, lightboxIndex, nextImage, prevImage]);
 
   return (
     <motion.div
@@ -466,6 +485,8 @@ const CollectionViewer = ({ category, images, onClose }: {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" onClick={() => setLightboxIndex(null)} />
 
