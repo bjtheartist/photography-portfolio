@@ -837,7 +837,7 @@ const Headshot = () => {
               I see myself as a connector first and a photographer second. My work is shaped by my career in technology and economic development. It's put me in spaces where the future gets built in real time, one conversation at a time. Photography became my way of honoring those scenes with care and accuracy, without turning people into content.
             </p>
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed mb-6">
-              I'm here to capture the human stories that show us who we are at our best.
+              I capture the human stories that show us who we are at our best.
             </p>
           </motion.div>
         </div>
