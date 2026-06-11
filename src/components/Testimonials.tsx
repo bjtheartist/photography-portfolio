@@ -40,7 +40,7 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section ref={rootRef} className="sect" style={{ paddingTop: 0 }}>
+    <section ref={rootRef} className="sect grainy" style={{ paddingTop: 0 }}>
       <div className="sect__head">
         <span className="t-meta">(05) — Kind Words</span>
         <span className="t-meta">From the rooms I've covered</span>

@@ -71,7 +71,7 @@ const Approach = () => {
   }, []);
 
   return (
-    <section ref={rootRef} className="paper" id="services">
+    <section ref={rootRef} className="paper grainy" id="services">
       <div className="sect" id="about" style={{ paddingBottom: 0 }}>
         <div className="sect__head">
           <span className="t-meta">(02) — The Approach</span>

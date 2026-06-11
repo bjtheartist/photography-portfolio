@@ -52,7 +52,7 @@ const Booking = () => {
   };
 
   return (
-    <section className="sect" id="book" style={{ background: 'var(--ink)', borderTop: '1px solid var(--paper-12)' }}>
+    <section className="sect grainy" id="book" style={{ background: 'var(--ink)', borderTop: '1px solid var(--paper-12)' }}>
       <div className="sect__head">
         <span className="t-meta">(06) — Book a Shoot</span>
         <span className="t-meta" style={{ color: 'var(--red)' }}>Now booking — 2026</span>

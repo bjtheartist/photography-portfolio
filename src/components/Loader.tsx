@@ -46,7 +46,7 @@ const Loader = ({ onComplete }: { onComplete: () => void }) => {
   }, []);
 
   return (
-    <div ref={rootRef} className="ldr" aria-hidden="true">
+    <div ref={rootRef} className="ldr grainy" aria-hidden="true">
       <div className="ldr__row t-meta">
         <span>BJN Photography&reg;</span>
         <span ref={textRef}>LOADING FRAMES...</span>

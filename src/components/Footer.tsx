@@ -1,7 +1,7 @@
 import { ChiStar } from '../lib/shared';
 
 const Footer = () => (
-  <footer className="footer" id="contact" role="contentinfo">
+  <footer className="footer grainy" id="contact" role="contentinfo">
     <div className="footer__cols">
       <div className="footer__col">
         <span className="t-meta">Sitemap</span>

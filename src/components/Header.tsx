@@ -76,7 +76,7 @@ const Header = () => {
         </button>
       </header>
 
-      <div ref={menuRef} className="menu" role="dialog" aria-label="Menu">
+      <div ref={menuRef} className="menu grainy" role="dialog" aria-label="Menu">
         <div>
           {LINKS.map((l, i) => (
             <span key={l.label} className="reveal-line">

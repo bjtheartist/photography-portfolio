@@ -4,7 +4,7 @@ import { useLenis } from './lib/shared';
 import Loader from './components/Loader';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Marquee from './components/Marquee';
+import Clients from './components/Marquee';
 import Gallery from './components/Gallery';
 import Chicago from './components/Chicago';
 import CultureStrip from './components/CultureStrip';
@@ -36,14 +36,14 @@ const App = () => {
   if (isTagger) return <Tagger />;
 
   return (
-    <div className="grain">
+    <div>
       <Loader onComplete={() => setReady(true)} />
       <Cursor />
       <Header />
 
       <main>
         <Hero ready={ready} />
-        <Marquee />
+        <Clients />
         <Gallery lenisRef={lenisRef} />
         <Chicago />
         <CultureStrip />
