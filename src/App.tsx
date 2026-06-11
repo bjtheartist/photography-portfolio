@@ -4,7 +4,7 @@ import { useLenis } from './lib/shared';
 import Loader from './components/Loader';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Clients from './components/Marquee';
+import Industries from './components/Marquee';
 import Gallery from './components/Gallery';
 import Chicago from './components/Chicago';
 import CultureStrip from './components/CultureStrip';
@@ -43,7 +43,7 @@ const App = () => {
 
       <main>
         <Hero ready={ready} />
-        <Clients />
+        <Industries />
         <Gallery lenisRef={lenisRef} />
         <Chicago />
         <CultureStrip />

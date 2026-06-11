@@ -5,18 +5,17 @@ import { ChiStar } from '../lib/shared';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ORGS = [
-  '1871',
-  'ChiStartup Hub',
-  'World Business Chicago',
-  'South Side Tech',
-  'Chi Hack Night',
-  'BLCK VC',
-  'CASA Cook County',
+const INDUSTRIES = [
+  'Tech & Startups',
+  'Corporate',
+  'Non-Profit',
+  'Social',
+  'Community',
+  'Creative',
 ];
 
-/** Static client index — replaces the old scrolling banner */
-const Clients = () => {
+/** Static industries index — the rooms this work shows up in */
+const Industries = () => {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,13 +37,13 @@ const Clients = () => {
   }, []);
 
   return (
-    <div ref={rootRef} className="clients" aria-label="As seen at">
-      <span className="clients__label t-meta">As seen at</span>
+    <div ref={rootRef} className="clients" aria-label="Industries covered">
+      <span className="clients__label t-meta">Working across</span>
       <div className="clients__list">
-        {ORGS.map((org, i) => (
-          <Fragment key={org}>
-            <span className="clients__name">{org}</span>
-            {i < ORGS.length - 1 && <ChiStar size={10} />}
+        {INDUSTRIES.map((industry, i) => (
+          <Fragment key={industry}>
+            <span className="clients__name">{industry}</span>
+            {i < INDUSTRIES.length - 1 && <ChiStar size={10} />}
           </Fragment>
         ))}
       </div>
@@ -52,4 +51,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Industries;
