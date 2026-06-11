@@ -1,20 +1,43 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# BJN Photography
 
-# Run and deploy your AI Studio app
+Photography portfolio for **Billy Ndizeye** — tech events, portraits, and culture photography in Chicago. *People. Culture. Community.*
 
-This contains everything you need to run your app locally.
+**Live:** https://bjtheartist.github.io/photography-portfolio/
 
-View your app in AI Studio: https://ai.studio/apps/076998c7-85a0-4ad0-9bce-eefc8974a57c
+## Design — "The Darkroom"
 
-## Run Locally
+Dark cinematic editorial built around the photographs:
 
-**Prerequisites:**  Node.js
+- True black / paper white / safelight red palette
+- Big Shoulders Display (Chicago's civic typeface) + Archivo + Space Mono
+- Loader with developing counter, Ken Burns hero slideshow
+- Lenis smooth scroll on the GSAP ticker, ScrollTrigger reveals
+- Filterable masonry gallery with full-screen lightbox (keyboard + swipe)
+- "Shot in Chicago" parallax skyline interlude with flag-star motif
+- Scroll-scrubbed approach statement, services index, bio, booking form
+- Film grain overlay, safelight cursor dot, fullscreen mobile menu
 
+## Tech Stack
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- React 19 + TypeScript + Vite 6
+- Tailwind CSS 4 (tokens) + custom CSS system in `src/index.css`
+- GSAP + ScrollTrigger, Lenis
+- FormSubmit for booking inquiries (mailto fallback)
+- GitHub Pages via Actions (`.github/workflows/deploy.yml`, deploys on push to `main`)
+
+## Local Development
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build to dist/
+npm run lint     # tsc --noEmit
+```
+
+## Structure
+
+- `src/App.tsx` — orchestrator (also routes `#tagger` to the image tagging dev tool)
+- `src/components/` — Loader, Header, Hero, Marquee, Gallery, Lightbox, Chicago, CultureStrip, Approach, Bio, Testimonials, Booking, Footer, Cursor
+- `src/lib/shared.tsx` — assetUrl (GH Pages base), ChiStar, useLenis
+- `src/data/galleryImages.ts` — image manifest with categories and covers
+- `public/` — photographs (portraits, creative, events, hero)
