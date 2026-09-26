@@ -3,7 +3,6 @@ import gsap from 'gsap';
 import { assetUrl, ChiStar } from '../lib/shared';
 
 const SLIDES = [
-  '/hero/chicago-skyline.jpg',
   '/hero/SEAN9753.jpg',
   '/hero/IMG_2511.jpg',
   '/hero/IMG_9784.jpg',
@@ -14,6 +13,8 @@ const SLIDES = [
   '/hero/casa-team.jpg',
   '/hero/1871-bowtie.jpg',
   '/hero/1871-olive-skyline.jpg',
+  '/hero/community-panel-trio.jpg',
+  '/hero/community-audience.jpg',
 ];
 
 const Hero = ({ ready }: { ready: boolean }) => {
