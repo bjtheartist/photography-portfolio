@@ -4,7 +4,8 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/photography-portfolio/',
+  // Vercel serves from the domain root; GitHub Pages serves from /photography-portfolio/
+  base: process.env.VERCEL ? '/' : '/photography-portfolio/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
