@@ -91,6 +91,7 @@ export const IMAGE_MANIFEST: string[] = [
   // New shoots (Sep 2026)
   '/events/community-panel-trio.jpg',
   '/events/community-audience.jpg',
+  '/events/community-mic.jpg',
   '/events/casa-run-01.jpg',
   '/events/casa-run-02.jpg',
   '/events/casa-run-03.jpg',
@@ -143,9 +144,10 @@ export const galleryImages: GalleryImage[] = [
   { src: "/creative/PPGS5490.jpg", category: "Creative/Editorial", size: "standard", title: "Studio Portrait", alt: "Creative/Editorial photography by BJN" },
   { src: "/creative/PPGS5541.jpg", category: "Creative/Editorial", size: "standard", title: "Studio Portrait", alt: "Creative/Editorial photography by BJN", isCover: true },
 
-  // --- Community (new, 2) ---
+  // --- Community (new, 3) ---
   { src: "/events/community-panel-trio.jpg", category: "Community", size: "standard", title: "Panel Conversation", alt: "Community photography by BJN" },
   { src: "/events/community-audience.jpg", category: "Community", size: "standard", title: "Panel Conversation", alt: "Community photography by BJN" },
+  { src: "/events/community-mic.jpg", category: "Community", size: "standard", title: "Panel Conversation", alt: "Community photography by BJN" },
 
   // --- Team CASA 20 Mile Run (new, 15) ---
   { src: "/events/casa-run-01.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },

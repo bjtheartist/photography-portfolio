@@ -15,6 +15,7 @@ const SLIDES = [
   '/hero/1871-olive-skyline.jpg',
   '/hero/community-panel-trio.jpg',
   '/hero/community-audience.jpg',
+  '/hero/community-mic.jpg',
 ];
 
 const Hero = ({ ready }: { ready: boolean }) => {
