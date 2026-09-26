@@ -10,6 +10,10 @@ const SLIDES = [
   '/hero/IMG_9768.jpg',
   '/hero/IMG_9441.jpg',
   '/hero/IMG_6535.jpg',
+  '/hero/casa-lakefront-run.jpg',
+  '/hero/casa-team.jpg',
+  '/hero/1871-bowtie.jpg',
+  '/hero/1871-olive-skyline.jpg',
 ];
 
 const Hero = ({ ready }: { ready: boolean }) => {
