@@ -88,6 +88,33 @@ export const IMAGE_MANIFEST: string[] = [
   '/events/S_PG2087.jpg',
   '/events/S_PG2103.jpg',
   '/events/S_PG2181.jpg',
+  // New shoots (Sep 2026)
+  '/events/casa-run-DSC08285.jpg',
+  '/events/casa-run-DSC08289.jpg',
+  '/events/casa-run-DSC08298.jpg',
+  '/events/casa-run-DSC08314.jpg',
+  '/events/casa-run-DSC08358.jpg',
+  '/events/casa-run-DSC08396.jpg',
+  '/events/casa-run-DSC08499.jpg',
+  '/events/casa-run-DSC08525.jpg',
+  '/events/casa-run-DSC08606.jpg',
+  '/events/casa-run-DSC08620.jpg',
+  '/events/casa-run-DSC08678.jpg',
+  '/events/casa-run-DSC08700.jpg',
+  '/events/casa-run-DSC08703.jpg',
+  '/events/casa-run-DSC08760.jpg',
+  '/events/1871-DSC00255.jpg',
+  '/events/1871-DSC00267.jpg',
+  '/events/1871-DSC00334.jpg',
+  '/events/1871-DSC00379.jpg',
+  '/events/1871-DSC00649.jpg',
+  '/events/1871-DSC01090.jpg',
+  '/events/1871-DSC01135.jpg',
+  '/events/1871-DSC02038.jpg',
+  '/events/1871-DSC02109.jpg',
+  '/events/1871-DSC07476.jpg',
+  '/events/1871-DSC07859.jpg',
+  '/events/1871-DSC08116.jpg',
 ];
 
 // Tagged gallery data — populated from tagger export
@@ -116,6 +143,22 @@ export const galleryImages: GalleryImage[] = [
   { src: "/creative/PPGS5490.jpg", category: "Creative/Editorial", size: "standard", title: "Studio Portrait", alt: "Creative/Editorial photography by BJN" },
   { src: "/creative/PPGS5541.jpg", category: "Creative/Editorial", size: "standard", title: "Studio Portrait", alt: "Creative/Editorial photography by BJN", isCover: true },
 
+  // --- Team CASA 20 Mile Run (new, 14) ---
+  { src: "/events/casa-run-DSC08285.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08289.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08298.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08314.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08358.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08396.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08499.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08525.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08606.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08620.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08678.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08700.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08703.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-run-DSC08760.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+
   // --- Non-Profit Events (8) --- cover: 273-SSUC6920
   { src: "/events/11-SSUC9688.jpg", category: "Non-Profit Events", size: "standard", title: "CASA Cook County Chicago Marathon", alt: "Non-Profit Events photography by BJN" },
   { src: "/events/118-SSUC8221.jpg", category: "Non-Profit Events", size: "standard", title: "CASA Cook County Chicago Marathon", alt: "Non-Profit Events photography by BJN" },
@@ -134,6 +177,20 @@ export const galleryImages: GalleryImage[] = [
   { src: "/events/SEAN0081.jpg", category: "Social Events", size: "standard", title: "SEAN0081", alt: "Social Events photography by BJN" },
   { src: "/events/SEAN0089.jpg", category: "Social Events", size: "standard", title: "SEAN0089", alt: "Social Events photography by BJN" },
   { src: "/events/SSUC2398.jpg", category: "Social Events", size: "standard", title: "BLCK VC Holiday Party", alt: "Social Events photography by BJN" },
+
+  // --- 1871 Momentum 2026 (new, 12) ---
+  { src: "/events/1871-DSC00255.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC00267.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC00334.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC00379.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC00649.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC01090.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC01135.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC02038.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC02109.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC07476.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC07859.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-DSC08116.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
 
   // --- Corporate Events (19) --- cover: S_PG2181
   { src: "/events/SSUC2435.jpg", category: "Corporate Events", size: "standard", title: "BLCK VC Holiday Party", alt: "Corporate Events photography by BJN" },
