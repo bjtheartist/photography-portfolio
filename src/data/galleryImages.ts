@@ -116,6 +116,17 @@ export const IMAGE_MANIFEST: string[] = [
   '/events/1871-07.jpg',
   '/events/1871-08.jpg',
   '/events/1871-09.jpg',
+  // New shoots (Oct 2026)
+  '/events/casa-marathon-01.jpg',
+  '/events/casa-marathon-02.jpg',
+  '/events/casa-marathon-03.jpg',
+  '/events/1871-open-house-01.jpg',
+  '/events/1871-open-house-02.jpg',
+  '/events/1871-open-house-03.jpg',
+  '/events/1871-open-house-04.jpg',
+  '/events/1871-open-house-05.jpg',
+  '/events/1871-open-house-06.jpg',
+  '/events/1871-open-house-07.jpg',
 ];
 
 // Tagged gallery data — populated from tagger export
@@ -165,6 +176,10 @@ export const galleryImages: GalleryImage[] = [
   { src: "/events/casa-run-13.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
   { src: "/events/casa-run-14.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
   { src: "/events/casa-run-15.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA 20 Mile Run", alt: "Non-Profit Events photography by BJN" },
+  // --- Team CASA Marathon Weekend (Oct 2026, 3) ---
+  { src: "/events/casa-marathon-01.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA Marathon Weekend", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-marathon-02.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA Marathon Weekend", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-marathon-03.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA Marathon Weekend", alt: "Non-Profit Events photography by BJN" },
 
   // --- Non-Profit Events (8) --- cover: 273-SSUC6920
   { src: "/events/11-SSUC9688.jpg", category: "Non-Profit Events", size: "standard", title: "CASA Cook County Chicago Marathon", alt: "Non-Profit Events photography by BJN" },
@@ -195,6 +210,14 @@ export const galleryImages: GalleryImage[] = [
   { src: "/events/1871-07.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
   { src: "/events/1871-08.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
   { src: "/events/1871-09.jpg", category: "Corporate Events", size: "standard", title: "1871 Momentum 2026", alt: "Corporate Events photography by BJN" },
+  // --- 1871 Open House (Oct 15 2026, 7) ---
+  { src: "/events/1871-open-house-01.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-02.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-03.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-04.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-05.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-06.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
+  { src: "/events/1871-open-house-07.jpg", category: "Corporate Events", size: "standard", title: "1871 Open House", alt: "Corporate Events photography by BJN" },
 
   // --- Corporate Events (19) --- cover: S_PG2181
   { src: "/events/SSUC2435.jpg", category: "Corporate Events", size: "standard", title: "BLCK VC Holiday Party", alt: "Corporate Events photography by BJN" },
