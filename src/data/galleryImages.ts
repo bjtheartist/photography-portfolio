@@ -127,6 +127,32 @@ export const IMAGE_MANIFEST: string[] = [
   '/events/1871-open-house-05.jpg',
   '/events/1871-open-house-06.jpg',
   '/events/1871-open-house-07.jpg',
+  // New shoots (Oct 2026, batch 2)
+  '/events/bbb100-01.jpg',
+  '/events/bbb100-02.jpg',
+  '/events/bbb100-03.jpg',
+  '/events/bbb100-04.jpg',
+  '/events/bbb100-05.jpg',
+  '/events/bbb100-06.jpg',
+  '/events/bbb100-07.jpg',
+  '/events/bbb100-08.jpg',
+  '/events/bbb100-09.jpg',
+  '/events/bbb100-10.jpg',
+  '/events/bbb100-11.jpg',
+  '/events/marathon-reception-01.jpg',
+  '/events/marathon-reception-02.jpg',
+  '/events/marathon-reception-03.jpg',
+  '/events/marathon-reception-04.jpg',
+  '/events/marathon-reception-05.jpg',
+  '/events/marathon-reception-06.jpg',
+  '/events/marathon-reception-07.jpg',
+  '/events/marathon-reception-08.jpg',
+  '/events/marathon-reception-09.jpg',
+  '/events/peace-runners-01.jpg',
+  '/events/peace-runners-02.jpg',
+  '/events/peace-runners-03.jpg',
+  '/events/casa-lakefront-01.jpg',
+  '/events/casa-lakefront-02.jpg',
 ];
 
 // Tagged gallery data — populated from tagger export
@@ -239,4 +265,37 @@ export const galleryImages: GalleryImage[] = [
   { src: "/events/S_PG2087.jpg", category: "Corporate Events", size: "tall", title: "Saint Clements Bi-annual Gala", alt: "Corporate Events photography by BJN" },
   { src: "/events/S_PG2103.jpg", category: "Corporate Events", size: "tall", title: "Saint Clements Bi-annual Gala", alt: "Corporate Events photography by BJN" },
   { src: "/events/S_PG2181.jpg", category: "Corporate Events", size: "tall", title: "Saint Clements Bi-annual Gala", alt: "Corporate Events photography by BJN", isCover: true },
+
+  // --- BBB 100th Anniversary (11) ---
+  { src: "/events/bbb100-01.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-02.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-03.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-04.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-05.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-06.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-07.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-08.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-09.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-10.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+  { src: "/events/bbb100-11.jpg", category: "Corporate Events", size: "standard", title: "BBB 100th Anniversary", alt: "Corporate Events photography by BJN" },
+
+  // --- Chicago Marathon 2025 Reception (9) ---
+  { src: "/events/marathon-reception-01.jpg", category: "Corporate Events", size: "tall", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-02.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-03.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-04.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-05.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-06.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-07.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-08.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+  { src: "/events/marathon-reception-09.jpg", category: "Corporate Events", size: "standard", title: "Chicago Marathon 2025 Reception", alt: "Corporate Events photography by BJN" },
+
+  // --- Peace Runners (3) ---
+  { src: "/events/peace-runners-01.jpg", category: "Community", size: "standard", title: "Peace Runners", alt: "Community photography by BJN" },
+  { src: "/events/peace-runners-02.jpg", category: "Community", size: "standard", title: "Peace Runners", alt: "Community photography by BJN" },
+  { src: "/events/peace-runners-03.jpg", category: "Community", size: "standard", title: "Peace Runners", alt: "Community photography by BJN" },
+
+  // --- Team CASA Lakefront Run (2) ---
+  { src: "/events/casa-lakefront-01.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA Lakefront Run", alt: "Non-Profit Events photography by BJN" },
+  { src: "/events/casa-lakefront-02.jpg", category: "Non-Profit Events", size: "standard", title: "Team CASA Lakefront Run", alt: "Non-Profit Events photography by BJN" },
 ];
